@@ -1,14 +1,55 @@
 import React from "react";
 
+const ReactMemo = () => {
 
-function ReactMemo({ count }) {
-return (
-<div style={{ border: "1px solid #ccc", padding: "10px", marginTop: "15px" }}>
-<h2>React.memo Component</h2>
-<p>Counter Value: {count}</p>
-</div>
-);
+    const [skill,setSkill] = React.useState("");
+    const [skills,setSkills] = React.useState(["HTML","CSS","JavaScript","React"])
+
+    const [error,setError] = React.useState("")
+
+    const handleChangeInput = (e) => {
+        if(e.target.value.length<=5){
+            setError("The length must be greater than 5")
+        }else{
+            setError("")
+        }
+        setSkill(e.target.value)
+    }
+
+    const handleAddSkill = () => {
+        setSkills(skills.concat(skill))
+    }
+    return(
+        <>
+            <input id="skill-input" type="text" onChange={handleChangeInput}/>
+            {
+                error.length ? <small id="small">{error}</small> :null
+            }
+            <button id="skill-btn" onClick={handleAddSkill}>Add Skill</button>
+            <SkillList skills={skills} />
+        </>
+    )
 }
+const SkillList = React.memo(({skills}) => {
+    console.log("rerendering")
+    return(
+        <ul>
+            {
+                skills.map((skill,i)=>(<li id={`item-${skill}`} key={i}>{skill}</li>))
+            }
+        </ul>
+    )
+})
 
+// const SkillList = ({skills}) => {
+//     console.log("rerendering")
+//     return(
+//         <ul>
+//             {
+//                 skills.map((skill,i)=>(<li key={i}>{skill}</li>))
+//             }
+//         </ul>
+//     )
+// }
 
-export default React.memo(ReactMemo);
+export default ReactMemo;
